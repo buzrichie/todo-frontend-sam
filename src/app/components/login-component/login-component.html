@@ -1,0 +1,129 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="text-center mb-0">
+            <span *ngIf="needsConfirmation">Confirm Your Email</span>
+            <span *ngIf="!needsConfirmation">{{ isLoginMode ? 'Sign In' : 'Sign Up' }}</span>
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+            <!-- Email Input -->
+            <div class="mb-3" *ngIf="!needsConfirmation">
+              <label for="email" class="form-label">Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                [class.is-valid]="email?.valid && email?.touched"
+                placeholder="Enter your email"
+              />
+              <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                {{ getEmailErrorMessage() }}
+              </div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-3" *ngIf="!needsConfirmation">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                formControlName="password"
+                [class.is-invalid]="password?.invalid && password?.touched"
+                [class.is-valid]="password?.valid && password?.touched"
+                placeholder="Enter your password"
+              />
+              <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+                {{ getPasswordErrorMessage() }}
+              </div>
+              <div class="form-text" *ngIf="!isLoginMode">
+                Password must be at least 8 characters with uppercase, lowercase, and numbers.
+              </div>
+            </div>
+
+            <!-- Confirmation Code Input -->
+            <div class="mb-3" *ngIf="needsConfirmation">
+              <label for="confirmationCode" class="form-label">Confirmation Code</label>
+              <input
+                type="text"
+                class="form-control"
+                id="confirmationCode"
+                formControlName="confirmationCode"
+                [class.is-invalid]="confirmationCode?.invalid && confirmationCode?.touched"
+                [class.is-valid]="confirmationCode?.valid && confirmationCode?.touched"
+                placeholder="Enter confirmation code from email"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="confirmationCode?.invalid && confirmationCode?.touched"
+              >
+                {{ getConfirmationCodeErrorMessage() }}
+              </div>
+              <div class="form-text">
+                We sent a confirmation code to your email. Please enter it above.
+              </div>
+              <button
+                type="button"
+                class="btn btn-link p-0 mt-1"
+                (click)="resendConfirmationCode()"
+              >
+                Resend confirmation code
+              </button>
+            </div>
+
+            <!-- Success Message -->
+            <div
+              *ngIf="successMessage"
+              class="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              {{ successMessage }}
+              <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+            </div>
+
+            <!-- Error Message -->
+            <div
+              *ngIf="errorMessage"
+              class="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              {{ errorMessage }}
+              <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-2"
+              [disabled]="loading || authForm.invalid"
+            >
+              <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm me-2"
+                role="status"
+              ></span>
+              <span *ngIf="needsConfirmation">Confirm Email</span>
+              <span *ngIf="!needsConfirmation">
+                {{ loading ? 'Please wait...' : isLoginMode ? 'Sign In' : 'Create Account' }}
+              </span>
+            </button>
+          </form>
+
+          <!-- Toggle Mode -->
+          <div class="text-center mt-3" *ngIf="!needsConfirmation">
+            <button type="button" class="btn btn-link p-0" (click)="toggleMode()">
+              {{
+                isLoginMode ? "Don't have an account? Sign up" : 'Already have an account? Sign in'
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
