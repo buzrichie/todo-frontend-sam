@@ -100,6 +100,7 @@ export class LoginComponent implements OnInit {
         // Check if confirmation is needed
         if (result.nextStep?.signUpStep === 'CONFIRM_SIGN_UP') {
           this.needsConfirmation = true;
+          this.isLoginMode = true;
           this.authForm.get('confirmationCode')?.setValidators([Validators.required]);
           this.authForm.get('confirmationCode')?.updateValueAndValidity();
         } else {
