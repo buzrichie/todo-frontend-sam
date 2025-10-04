@@ -89,6 +89,7 @@ export class LoginComponent implements OnInit {
           this.successMessage = 'Email confirmed successfully! You can now sign in.';
           this.needsConfirmation = false;
           this.authForm.patchValue({ confirmationCode: '' });
+          this.router.navigate(['/']);
         } else {
           await this.amplifyService.signIn(formValue.email, formValue.password);
           this.router.navigate(['/tasks']);
