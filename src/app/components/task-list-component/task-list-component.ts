@@ -5,6 +5,7 @@ import { Task } from '../../models/task.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list-component',
@@ -25,7 +26,8 @@ export class TaskListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
-    private amplifyService: AmplifyService
+    private amplifyService: AmplifyService,
+    private router: Router
   ) {
     this.taskForm = this.createTaskForm();
     this.editTaskForm = this.createEditTaskForm();
@@ -165,6 +167,7 @@ export class TaskListComponent implements OnInit {
   async signOut() {
     try {
       await this.amplifyService.signOut();
+      this.router.navigate(['/login']);
     } catch (error: any) {
       this.errorMessage = error.message || 'Failed to sign out';
     }
